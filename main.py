@@ -1,7 +1,7 @@
 import sys
 import os
 import docx
-
+import requests
 
 from PySide2 import QtGui
 from PySide2.QtGui import QIntValidator
@@ -200,33 +200,33 @@ class MainWindows(QMainWindow):
             # self.ui.tableWidget_2.setRowCount()
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Киножурнал")
-            kinogurnal = cursor.fetchall()
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/gurnal_start',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in kinogurnal:
+            for i in com.json()['gurnal']:
                 if i[2] == znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
-                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(films[i[1] - 1][1]))
+                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(com.json()['films'][i[1] - 1][1]))
                     R += 2
         if self.ui.comboBox_3.currentIndex() == 1:
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(2)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название", "Дата трансляции"])
-            cursor.execute("SELECT * FROM Киножурнал")
-            kinogurnal = cursor.fetchall()
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/gurnal_start',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in kinogurnal:
+            for i in com.json()['gurnal']:
                 if i[3] > znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
-                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(films[i[1] - 1][1]))
+                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(com.json()['films'][i[1] - 1][1]))
                     self.ui.tableWidget_2.setItem(R, 1, QTableWidgetItem(i[2]))
                     R += 2
 
@@ -234,17 +234,17 @@ class MainWindows(QMainWindow):
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(2)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название", "Дата трансляции"])
-            cursor.execute("SELECT * FROM Киножурнал")
-            kinogurnal = cursor.fetchall()
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/gurnal_start',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in kinogurnal:
+            for i in com.json()['gurnal']:
                 if i[3] < znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
-                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(films[i[1] - 1][1]))
+                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(com.json()['films'][i[1] - 1][1]))
                     self.ui.tableWidget_2.setItem(R, 1, QTableWidgetItem(i[2]))
                     R += 2
 
@@ -252,17 +252,17 @@ class MainWindows(QMainWindow):
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(2)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название", "Дата трансляции"])
-            cursor.execute("SELECT * FROM Киножурнал")
-            kinogurnal = cursor.fetchall()
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/gurnal_start',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in kinogurnal:
+            for i in com.json()['gurnal']:
                 if i[3] == znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
-                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(films[i[1] - 1][1]))
+                    self.ui.tableWidget_2.setItem(R, 0, QTableWidgetItem(com.json()['films'][i[1] - 1][1]))
                     self.ui.tableWidget_2.setItem(R, 1, QTableWidgetItem(i[2]))
                     R += 2
 
@@ -270,10 +270,12 @@ class MainWindows(QMainWindow):
             znachenie = str(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if i[2].find(znachenie) > -1:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -284,10 +286,12 @@ class MainWindows(QMainWindow):
             znachenie = str(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if i[3].find(znachenie) > -1:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -298,11 +302,13 @@ class MainWindows(QMainWindow):
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if float(i[7]) > znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -313,11 +319,13 @@ class MainWindows(QMainWindow):
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if float(i[7]) < znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -328,11 +336,13 @@ class MainWindows(QMainWindow):
             znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if float(i[7]) == znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -343,11 +353,13 @@ class MainWindows(QMainWindow):
             # znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if str(i[9]) == '1':
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -358,11 +370,13 @@ class MainWindows(QMainWindow):
             # znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if str(i[9]) == '0':
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -373,11 +387,13 @@ class MainWindows(QMainWindow):
             # znachenie = float(self.ui.lineEdit_6.text())
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if str(i[9]) == '2':
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -389,11 +405,13 @@ class MainWindows(QMainWindow):
 
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if int(i[5].replace('$', '')) == znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -405,11 +423,13 @@ class MainWindows(QMainWindow):
 
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if int(i[5].replace('$', '')) > znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -421,11 +441,13 @@ class MainWindows(QMainWindow):
 
             self.ui.tableWidget_2.setColumnCount(1)
             self.ui.tableWidget_2.setHorizontalHeaderLabels(["Название"])
-            cursor.execute("SELECT * FROM Фильмы")
-            films = cursor.fetchall()
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
 
             R = 1
-            for i in films:
+            for i in com.json()['films']:
                 if int(i[5].replace('$', '')) < znachenie:
                     self.ui.tableWidget_2.setRowCount(R)
                     R -= 1
@@ -433,130 +455,153 @@ class MainWindows(QMainWindow):
                     R += 2
 
     def FILMS(self):
-        global films, cursor, conn
-        conn = sqlite3.connect("bd.db")
-        cursor = conn.cursor()
+        # global cursor, conn
+        # conn = sqlite3.connect("bd.db")
+        # cursor = conn.cursor()
+        try:
+            self.ui.comboBox.clear()
+            self.ui.comboBox_2.clear()
+            self.ui.comboBox_4.clear()
+            com = requests.post(
+                'http://127.0.0.1:5000/films',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            for i in com.json()['films']:
+                self.ui.comboBox.addItem(i[1])
+                self.ui.comboBox_2.addItem(i[1])
+            self.ui.label_2.setText('Название: ' + com.json()['films'][self.ui.comboBox.currentIndex()][1])
+            self.ui.label_3.setText('Страна: ' + com.json()['films'][self.ui.comboBox.currentIndex()][2])
+            self.ui.label_4.setText('Жанр: ' + com.json()['films'][self.ui.comboBox.currentIndex()][3])
+            self.ui.label_5.setText('Длительность: ' + com.json()['films'][self.ui.comboBox.currentIndex()][4])
+            self.ui.label_30.setText('Дата выхода: ' + com.json()['films'][self.ui.comboBox.currentIndex()][8])
+            self.ui.label_6.setText('Бюджет: ' + com.json()['films'][self.ui.comboBox.currentIndex()][5])
+            self.ui.label_7.setText('Рейтинг: ' + str(com.json()['films'][self.ui.comboBox.currentIndex()][7]))
+            if com.json()['films'][self.ui.comboBox.currentIndex()][9] == 0:
+                self.ui.label_8.setText('Состояние: выбыл из проката')
+            elif com.json()['films'][self.ui.comboBox.currentIndex()][9] == 1:
+                self.ui.label_8.setText('Состояние: в прокате')
+            else:
+                self.ui.label_8.setText('Состояние: ожидает проката')
+            self.ui.plainTextEdit.setPlainText(com.json()['films'][self.ui.comboBox.currentIndex()][6])
 
-        # Получаем данные с таблица Фильмы
-        cursor.execute("SELECT * FROM Фильмы")
-        films = cursor.fetchall()
-        self.ui.comboBox.clear()
-        self.ui.comboBox_2.clear()
-        self.ui.comboBox_4.clear()
-        for i in films:
-            self.ui.comboBox.addItem(i[1])
-            self.ui.comboBox_2.addItem(i[1])
-        self.ui.label_2.setText('Название: ' + films[self.ui.comboBox.currentIndex()][1])
-        self.ui.label_3.setText('Страна: ' + films[self.ui.comboBox.currentIndex()][2])
-        self.ui.label_4.setText('Жанр: ' + films[self.ui.comboBox.currentIndex()][3])
-        self.ui.label_5.setText('Длительность: ' + films[self.ui.comboBox.currentIndex()][4])
-        self.ui.label_30.setText('Дата выхода: ' + films[self.ui.comboBox.currentIndex()][8])
-        self.ui.label_6.setText('Бюджет: ' + films[self.ui.comboBox.currentIndex()][5])
-        self.ui.label_7.setText('Рейтинг: ' + str(films[self.ui.comboBox.currentIndex()][7]))
-        if films[self.ui.comboBox.currentIndex()][9] == 0:
-            self.ui.label_8.setText('Состояние: выбыл из проката')
-        elif films[self.ui.comboBox.currentIndex()][9] == 1:
-            self.ui.label_8.setText('Состояние: в прокате')
-        else:
-            self.ui.label_8.setText('Состояние: ожидает проката')
-        self.ui.plainTextEdit.setPlainText(films[self.ui.comboBox.currentIndex()][6])
-
-        cursor.execute("SELECT * FROM Киножурнал")
-        kinogurnal = cursor.fetchall()
-
-        for i in kinogurnal:
-            if i[1] == 1:
-                self.ui.comboBox_4.addItem(i[2])
+            for i in com.json()['kinogurnal']:
+                if i[1] == 1:
+                    self.ui.comboBox_4.addItem(i[2])
+        except:
+            print('Connection error')
+            print('1')
 
     def inf_film(self):
-        self.ui.label_2.setText('Название: ' + films[self.ui.comboBox.currentIndex()][1])
-        self.ui.label_3.setText('Страна: ' + films[self.ui.comboBox.currentIndex()][2])
-        self.ui.label_4.setText('Жанр: ' + films[self.ui.comboBox.currentIndex()][3])
-        self.ui.label_5.setText('Длительность: ' + films[self.ui.comboBox.currentIndex()][4])
-        self.ui.label_30.setText('Дата выхода: ' + films[self.ui.comboBox.currentIndex()][8])
-        self.ui.label_6.setText('Бюджет: ' + films[self.ui.comboBox.currentIndex()][5])
-        self.ui.label_7.setText('Рейтинг: ' + str(films[self.ui.comboBox.currentIndex()][7]))
-        if films[self.ui.comboBox.currentIndex()][9] == 0:
-            self.ui.label_8.setText('Состояние: выбыл из проката')
-        elif films[self.ui.comboBox.currentIndex()][9] == 1:
-            self.ui.label_8.setText('Состояние: в прокате')
-        else:
-            self.ui.label_8.setText('Состояние: ожидает проката')
-        self.ui.plainTextEdit.setPlainText(films[self.ui.comboBox.currentIndex()][6])
+        try:
+            com = requests.post(
+                'http://127.0.0.1:5000/inf_film',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            self.ui.label_2.setText('Название: ' + com.json()['films'][self.ui.comboBox.currentIndex()][1])
+            self.ui.label_3.setText('Страна: ' + com.json()['films'][self.ui.comboBox.currentIndex()][2])
+            self.ui.label_4.setText('Жанр: ' + com.json()['films'][self.ui.comboBox.currentIndex()][3])
+            self.ui.label_5.setText('Длительность: ' + com.json()['films'][self.ui.comboBox.currentIndex()][4])
+            self.ui.label_30.setText('Дата выхода: ' + com.json()['films'][self.ui.comboBox.currentIndex()][8])
+            self.ui.label_6.setText('Бюджет: ' + com.json()['films'][self.ui.comboBox.currentIndex()][5])
+            self.ui.label_7.setText('Рейтинг: ' + str(com.json()['films'][self.ui.comboBox.currentIndex()][7]))
+            if com.json()['films'][self.ui.comboBox.currentIndex()][9] == 0:
+                self.ui.label_8.setText('Состояние: выбыл из проката')
+            elif com.json()['films'][self.ui.comboBox.currentIndex()][9] == 1:
+                self.ui.label_8.setText('Состояние: в прокате')
+            else:
+                self.ui.label_8.setText('Состояние: ожидает проката')
+            self.ui.plainTextEdit.setPlainText(com.json()['films'][self.ui.comboBox.currentIndex()][6])
+        except:
+            print('Connection error')
+            print('7')
 
     def films_mesta_obr_one(self):
-        self.ui.comboBox_4.clear()
-        cursor.execute("SELECT * FROM Киножурнал")
-        kinogurnal = cursor.fetchall()
+        try:
+            com = requests.post(
+                'http://127.0.0.1:5000/films_mesta_obr_one',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            self.ui.comboBox_4.clear()
 
-        for i in kinogurnal:
-            if i[1] == self.ui.comboBox_2.currentIndex() + 1:
-                self.ui.comboBox_4.addItem(i[2])
+            for i in com.json()['kinogurnal']:
+                if i[1] == self.ui.comboBox_2.currentIndex() + 1:
+                    self.ui.comboBox_4.addItem(i[2])
 
-        self.films_mesta_obr()
+            self.films_mesta_obr()
+        except:
+            print('Connection error')
+            print('8')
 
     def films_mesta_obr(self):
-        # self.ui.comboBox_4.clear()
-        # cursor.execute("SELECT * FROM Киножурнал")
-        # kinogurnal = cursor.fetchall()
-        cursor.execute("SELECT * FROM 'Места в зале'")
-        mesto = cursor.fetchall()
-
-        # for i in kinogurnal:
-        #     if i[1] == self.ui.comboBox_2.currentIndex() + 1:
-        #         self.ui.comboBox_4.addItem(i[2])
-
-        for i in mesto:
-            if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[6] == self.ui.comboBox_4.currentText():
-                KodStroka = eval('self.ui.pushButton_' + str(i[5]) + '.setStyleSheet')
-                if i[4] == 0:
-                    KodStroka("background-color: rgb(52, 59, 72);\n"
-                              "border-style: solid;\n"
-                              "border-width: 1px;\n"
-                              "border-radius: 25px;\n"
-                              "border-color: rgb(52, 59, 72);")
-                elif i[4] == 1:
-                    KodStroka("background-color: rgb(27, 29, 35);\n"
-                              "border-style: solid;\n"
-                              "border-width: 1px;\n"
-                              "border-radius: 25px;\n"
-                              "border-color: rgb(27, 29, 35);")
+        try:
+            com = requests.post(
+                'http://127.0.0.1:5000/films_mesta_obr',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            for i in com.json()['mesto']:
+                if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[6] == self.ui.comboBox_4.currentText():
+                    KodStroka = eval('self.ui.pushButton_' + str(i[5]) + '.setStyleSheet')
+                    if i[4] == 0:
+                        KodStroka("background-color: rgb(52, 59, 72);\n"
+                                  "border-style: solid;\n"
+                                  "border-width: 1px;\n"
+                                  "border-radius: 25px;\n"
+                                  "border-color: rgb(52, 59, 72);")
+                    elif i[4] == 1:
+                        KodStroka("background-color: rgb(27, 29, 35);\n"
+                                  "border-style: solid;\n"
+                                  "border-width: 1px;\n"
+                                  "border-radius: 25px;\n"
+                                  "border-color: rgb(27, 29, 35);")
+        except:
+            print('Connection error')
+            print('2')
 
     def obraboka_mest(self, x, y, z):
         self.ROOT()
         if ruut:
-            # Получаем данные с таблица Фильмы
-            cursor.execute("SELECT * FROM 'Места в зале'")
-            mesto = cursor.fetchall()
             KodStroka = eval('self.ui.pushButton_' + str(z) + '.setStyleSheet')
             inf_mesto = []
-            for i in mesto:
-                if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[6] == self.ui.comboBox_4.currentText():
-                    inf_mesto.append(i)
+            try:
+                com = requests.post(
+                    'http://127.0.0.1:5000/obraboka_mest_mesto',
+                    json={'comboBox': self.ui.comboBox.currentIndex()}
+                )
+
+                for i in com.json()['mesto']:
+                    if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[6] == self.ui.comboBox_4.currentText():
+                        inf_mesto.append(i)
+            except:
+                print('Connection error')
+
             for i in inf_mesto:
                 if i[2] == x and i[3] == y:
                     if i[4] == 0:
-                        cursor.execute(
-                            "UPDATE 'Места в зале' SET 'Состояние' = " + str(1) + " WHERE Kod_zala = " + str(i[0]))
+                        comm = requests.post(
+                            'http://127.0.0.1:5000/obraboka_mest_inf_mesto_1',
+                            json={'i': i}
+                        )
                         KodStroka("background-color: rgb(27, 29, 35);\n"
                                   "border-style: solid;\n"
                                   "border-width: 1px;\n"
                                   "border-radius: 25px;\n"
                                   "border-color: rgb(27, 29, 35);")
                     elif i[4] == 1:
-                        cursor.execute(
-                            "UPDATE 'Места в зале' SET 'Состояние' = " + str(0) + " WHERE Kod_zala = " + str(i[0]))
+                        commm = requests.post(
+                            'http://127.0.0.1:5000/obraboka_mest_inf_mesto_0',
+                            json={'i': i}
+                        )
                         KodStroka("background-color: rgb(52, 59, 72);\n"
                                   "border-style: solid;\n"
                                   "border-width: 1px;\n"
                                   "border-radius: 25px;\n"
                                   "border-color: rgb(52, 59, 72);")
-            conn.commit()
-
-            cursor.execute("SELECT * FROM 'Места в зале'")
-            mesto = cursor.fetchall()
+            commmm = requests.post(
+                'http://127.0.0.1:5000/obraboka_mest_inf_mesto_2',
+                json={'i': i}
+            )
             inf_mesto = []
-            for i in mesto:
+            for i in commmm.json()['mesto']:
                 if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[6] == self.ui.comboBox_4.currentText():
                     inf_mesto.append(i)
             zanyto = 0
@@ -564,78 +609,83 @@ class MainWindows(QMainWindow):
                 if i[4] == 1:
                     zanyto += 1
             procent = 90 / 100 * zanyto
-            cursor.execute("SELECT * FROM Киножурнал")
-            kinogurnal = cursor.fetchall()
-            zapis = 0
-            for i in kinogurnal:
-                if i[1] == self.ui.comboBox_2.currentIndex() + 1 and i[2] == self.ui.comboBox_4.currentText():
-                    zapis = i[0]
-            cursor.execute("UPDATE 'Киножурнал' SET 'Посещаемость' = " + str(procent) + " WHERE Zapis = " + str(zapis))
-            conn.commit()
+            commmmm = requests.post(
+                'http://127.0.0.1:5000/obraboka_mest_inf_mesto_3',
+                json={'comboBox_2': self.ui.comboBox_2.currentIndex(), 'comboBox_4': self.ui.comboBox_4.currentText(),
+                      'procent': procent}
+            )
             self.gurnal_start()
 
     def del_prokat(self):
         self.ROOT()
         if ruut:
-            # Получаем данные с таблица Фильмы
-            cursor.execute("SELECT * FROM Фильмы")
-            filmss = cursor.fetchall()
-            if filmss[self.ui.comboBox.currentIndex()][9] == 1:
-                cursor.execute(
-                    "UPDATE 'Фильмы' SET 'Состояние' = " + str(0) + " WHERE Kod_films = " + str(
-                        self.ui.comboBox.currentIndex() + 1))
-                self.ui.label_8.setText('Состояние: выбыл из проката')
-                conn.commit()
-                self.inf()
-            else:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle("Ошибка")
-                msg.setText("Фильм не находится в прокате")
-                okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
-                msg.exec()
+            try:
+                com = requests.post(
+                    'http://127.0.0.1:5000/del_prokat',
+                    json={'comboBox': self.ui.comboBox.currentIndex()}
+                )
+                # print(com.json()['comm'])
+                # Получаем данные с таблица Фильмы
+                if com.json()['ok']:
+                    self.ui.label_8.setText('Состояние: выбыл из проката')
+                    self.inf()
+                else:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Information)
+                    msg.setWindowTitle("Ошибка")
+                    msg.setText("Фильм не находится в прокате")
+                    okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
+                    msg.exec()
+            except:
+                print('Connection error')
+                print('3')
 
     def add_prokat(self):
         self.ROOT()
         if ruut:
-            # Получаем данные с таблица Фильмы
-            cursor.execute("SELECT * FROM Фильмы")
-            filmss = cursor.fetchall()
-            if filmss[self.ui.comboBox.currentIndex()][9] == 0 or filmss[self.ui.comboBox.currentIndex()][9] == 2:
-                cursor.execute(
-                    "UPDATE 'Фильмы' SET 'Состояние' = " + str(1) + " WHERE Kod_films = " + str(
-                        self.ui.comboBox.currentIndex() + 1))
-                self.ui.label_8.setText('Состояние: в прокате')
-                conn.commit()
-                self.inf()
-            else:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle("Ошибка")
-                msg.setText("Фильм уже находится в прокате")
-                okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
-                msg.exec()
+            try:
+                com = requests.post(
+                    'http://127.0.0.1:5000/add_prokat',
+                    json={'comboBox': self.ui.comboBox.currentIndex()}
+                )
+                # print(com.json()['comm'])
+                # Получаем данные с таблица Фильмы
+                if com.json()['ok']:
+                    self.ui.label_8.setText('Состояние: в прокате')
+                    self.inf()
+                else:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Information)
+                    msg.setWindowTitle("Ошибка")
+                    msg.setText("Фильм уже находится в прокате")
+                    okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
+                    msg.exec()
+            except:
+                print('Connection error')
+                print('4')
 
     def gurnal_start(self):
-        cursor.execute("SELECT * FROM Киножурнал")
-        gurnal = cursor.fetchall()
-
-        cursor.execute("SELECT * FROM Фильмы")
-        films = cursor.fetchall()
-
-        len_gurnal = len(gurnal)
-        self.ui.tableWidget.setRowCount(len_gurnal)
-        h = 0
-        for i in gurnal:
-            self.ui.tableWidget.setItem(h, 1, QTableWidgetItem(i[2]))
-            self.ui.tableWidget.setItem(h, 2, QTableWidgetItem(str(i[3])))
-            h += 1
-        h = 0
-        for i in gurnal:
-            for j in films:
-                if i[1] == j[0]:
-                    self.ui.tableWidget.setItem(h, 0, QTableWidgetItem(j[1]))
-            h += 1
+        try:
+            com = requests.post(
+                'http://127.0.0.1:5000/gurnal_start',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            len_gurnal = len(com.json()['gurnal'])
+            self.ui.tableWidget.setRowCount(len_gurnal)
+            h = 0
+            for i in com.json()['gurnal']:
+                self.ui.tableWidget.setItem(h, 1, QTableWidgetItem(i[2]))
+                self.ui.tableWidget.setItem(h, 2, QTableWidgetItem(str(i[3])))
+                h += 1
+            h = 0
+            for i in com.json()['gurnal']:
+                for j in com.json()['films']:
+                    if i[1] == j[0]:
+                        self.ui.tableWidget.setItem(h, 0, QTableWidgetItem(j[1]))
+                h += 1
+        except:
+            print('Connection error')
+            print('5')
 
     def add_gurnal_zapis(self):
         self.ROOT()
@@ -645,18 +695,19 @@ class MainWindows(QMainWindow):
 
     def seve_gurnal(self):
         self.ROOT()
+        data_t = []
+        for i in range(int(self.ui.tableWidget.rowCount())):
+            data_t.append(str(self.ui.tableWidget.item(i, 1).text()))
         if ruut:
             try:
-                cursor.execute("SELECT * FROM Киножурнал")
-                gurnal = cursor.fetchall()
-                h = 0
-                for i in gurnal:
-                    cursor.execute("UPDATE 'Киножурнал' SET 'Дата_трансляции' = " + "'" + str(
-                        self.ui.tableWidget.item(h, 1).text()) + "'" + " WHERE Zapis = " + str(i[0]))
-                    # cursor.execute("UPDATE 'Киножурнал' SET 'Посещаемость' = " + str(
-                    #     self.ui.tableWidget.item(h, 2).text()) + " WHERE Zapis = " + str(i[0]))
-                    h += 1
-                conn.commit()
+                try:
+                    com = requests.post(
+                        'http://127.0.0.1:5000/seve_gurnal',
+                        json={'data_t': data_t}
+                    )
+                except:
+                    print('Connection error')
+                    print('9')
             except AttributeError:
                 self.showNormal()
                 self.FILMS()
@@ -667,58 +718,50 @@ class MainWindows(QMainWindow):
     def del_gurnal_zapis(self):
         self.ROOT()
         if ruut:
-            cursor.execute("SELECT * FROM Киножурнал")
-            gurnal = cursor.fetchall()
-            len_gurnal = len(gurnal)
-            if len_gurnal < int(self.ui.lineEdit.text()) or int(self.ui.lineEdit.text()) <= 0:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle("Ошибка")
-                msg.setText("Данная запись отсуствует")
-                okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
-                msg.exec()
+            try:
+                com = requests.post(
+                    'http://127.0.0.1:5000/del_gurnal_zapis',
+                    json={'lineEdit': self.ui.lineEdit.text()}
+                )
+                if com.json()['msg']:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Information)
+                    msg.setWindowTitle("Ошибка")
+                    msg.setText("Данная запись отсуствует")
+                    okButton = msg.addButton('Хорошо', QMessageBox.AcceptRole)
+                    msg.exec()
 
-            else:
-                dataTra = ''
-                for i in gurnal:
-                    if i[0] == int(self.ui.lineEdit.text()):
-                        dataTra = i[2]
-                        break
-                print(dataTra)
-
-                if int(self.ui.lineEdit.text()) == len_gurnal:
-                    cursor.execute("DELETE FROM Киножурнал WHERE Zapis = ?", (str(self.ui.lineEdit.text()),))
-                    cursor.execute("DELETE FROM 'Места в зале' WHERE Дата_трансляции = ?", (str(dataTra),))
-                    conn.commit()
-                    self.gurnal_start()
                 else:
-                    cursor.execute("DELETE FROM Киножурнал WHERE Zapis = ?", (str(int(self.ui.lineEdit.text())),))
-                    cursor.execute("DELETE FROM 'Места в зале' WHERE Дата_трансляции = ?", (str(dataTra),))
-                    for i in range(int(self.ui.lineEdit.text()), len_gurnal + 1):
-                        cursor.execute("UPDATE Киножурнал SET 'Zapis' = " + str(i) + " WHERE Zapis = " + str(i + 1))
-                    conn.commit()
                     self.gurnal_start()
+            except:
+                print('Connection error')
+                print('10')
 
     def inf(self):
-        cursor.execute("SELECT * FROM Фильмы")
-        films = cursor.fetchall()
+        try:
+            com = requests.post(
+                'http://127.0.0.1:5000/inf',
+                json={'comboBox': self.ui.comboBox.currentIndex()}
+            )
+            kol_vo_films = len(com.json()['films'])
+            ogidanie_prokata = 0
+            vibili_prokat = 0
+            prokat = 0
+            for i in com.json()['films']:
+                if i[9] == 0:
+                    vibili_prokat += 1
+                elif i[9] == 1:
+                    prokat += 1
+                elif i[9] == 2:
+                    ogidanie_prokata += 1
 
-        kol_vo_films = len(films)
-        ogidanie_prokata = 0
-        vibili_prokat = 0
-        prokat = 0
-        for i in films:
-            if i[9] == 0:
-                vibili_prokat += 1
-            elif i[9] == 1:
-                prokat += 1
-            elif i[9] == 2:
-                ogidanie_prokata += 1
-
-        self.ui.lineEdit_2.setText(str(kol_vo_films))
-        self.ui.lineEdit_3.setText(str(ogidanie_prokata))
-        self.ui.lineEdit_4.setText(str(vibili_prokat))
-        self.ui.lineEdit_5.setText(str(prokat))
+            self.ui.lineEdit_2.setText(str(kol_vo_films))
+            self.ui.lineEdit_3.setText(str(ogidanie_prokata))
+            self.ui.lineEdit_4.setText(str(vibili_prokat))
+            self.ui.lineEdit_5.setText(str(prokat))
+        except:
+            print('Connection error')
+            print('6')
 
     def printer(self):
         doc = docx.Document()
